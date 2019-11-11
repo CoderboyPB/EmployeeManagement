@@ -1,0 +1,60 @@
+﻿@model LoginViewModel
+@inject SignInManager<ApplicationUser> signInManager;
+@{
+    ViewBag.Title = "User Login";
+}
+
+<div class="row mt-3">
+    <div class="col-md-6">
+        <h1>Local Account Login</h1>
+        <hr />
+        <div asp-validation-summary="All" class="text-danger">          
+        </div>
+        <form method="post">
+            <div class="form-group">
+                <label asp-for="Email"></label>
+                <input asp-for="Email" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label asp-for="Password"></label>
+                <input asp-for="Password" class="form-control" />
+            </div>
+            <div class="form-group">
+               <div class="checkbox">
+                   <label>
+                       <input asp-for="RememberMe" />
+                       @Html.DisplayNameFor(m => m.RememberMe)
+                   </label>
+               </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Login</button>
+            <br />
+            <a asp-action="ForgotPassword">Forgot Password?</a>
+        </form>
+    </div>
+    <div class="col-md-6">
+        <h1>External Login</h1>
+        <hr/>
+        @{ 
+            if(Model.ExternalLogins.Count == 0)
+            {
+                <div>no external logins configured.</div>
+            }
+            else
+            {
+                <form method="post" asp-action="ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl">
+                    <div>
+                        @foreach(var provider in Model.ExternalLogins)
+                        {
+                            <button type="submit" class="btn btn-primary" style="width:auto" 
+                                    name="provider" value="@provider.Name"
+                                    title="Logging in using your @provider.DisplayName Account">
+                                @provider.DisplayName
+                            </button>
+                        }
+                    </div>
+                </form>
+            }
+        }
+    </div>
+</div>
